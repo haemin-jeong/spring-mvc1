@@ -1,7 +1,9 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,8 +43,7 @@ public class RequestParamController {
     }
 
     /**
-     * @RequestParam
-     * 쿼리 파라미터명과 변수명이 같을 때 name 속성 생략 가능
+     * @RequestParam 쿼리 파라미터명과 변수명이 같을 때 name 속성 생략 가능
      */
     @ResponseBody
     @RequestMapping("/request-param-v3")
@@ -56,6 +57,7 @@ public class RequestParamController {
 
     /**
      * 파라미터가 String, int, Integer 등 단순 타입이면 @RequestParam 생략 가능
+     *
      * @RequestParam 생략 시엔 require=false 와 같다.
      */
     @ResponseBody
@@ -99,6 +101,32 @@ public class RequestParamController {
     @RequestMapping("/request-param-map")
     public String requestParamMap(@RequestParam Map<String, Object> paramMap) {
         log.info("username={}, age={}", paramMap.get("username"), paramMap.get("age"));
+        return "ok";
+    }
+
+    /**
+     * @ModelAttriubet 동작 과정
+     * 1. HelloData 객체 생성
+     * 2. 요청 파라미터의 이름으로 helloData 객체의 프로퍼티를 찾아 setter 를 호출하여 파라미터 값을 입력(바인딩)한다.
+     * 프로퍼티 : 어떤 필드가 getter, setter 를 가지고 있으면 해당 필드는 프로퍼티이다.
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+        log.info("helloData={}", helloData);
+        return "ok";
+    }
+
+    /**
+     * @ModelAttribute 생략
+     * 생략시 규칙
+     * - String, int, Integer 와 같은 단순 타입 -> @RequestParam
+     * - 나머지 -> @ModelAttribute(argument resolver 로 지정된 타입 제외)
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) {
+        log.info("helloData={}", helloData);
         return "ok";
     }
 }
