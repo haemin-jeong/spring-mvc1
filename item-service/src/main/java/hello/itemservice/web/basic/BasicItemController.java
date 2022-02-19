@@ -64,10 +64,16 @@ public class BasicItemController {
      * - name 속성을 생략시 디폴트 값은 클래스 이름의 첫글자를 소문자로 바꾼 값으로. HelloData -> helloData
      * - @ModelAttribute 생략 가능
      */
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV2(@ModelAttribute Item item) {
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    @PostMapping("/add")
+    public String addItemV3(@ModelAttribute Item item) {
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
     }
 
     @GetMapping("/{itemId}/edit")
